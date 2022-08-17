@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, InteractionType, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle  } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 require('dotenv').config();
@@ -30,7 +30,15 @@ for(const file of commandFiles){
 
 // Command handling
 client.on('interactionCreate', async interaction =>{
-  if(!interaction.isChatInputCommand()) return;
+  // if(!interaction.isChatInputCommand()) return;
+  if(interaction.type === InteractionType.ModalSubmit){
+    if(interaction.customId === 'myModal'){
+      const favoriteColor = interaction.fields.getTextInputValue('favoriteColorInput');
+      const hobbies = interaction.fields.getTextInputValue('hobbiesInput');
+      console.log({ favoriteColor, hobbies });
+      await interaction.reply({ content: `Your submission was received successfully!`});
+    }
+  };
 
   const command = client.commands.get(interaction.commandName);
 
