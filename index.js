@@ -4,6 +4,7 @@ const path = require('node:path');
 const axios = require('axios');
 const Canvas = require('@napi-rs/canvas');
 const championJsonFile = require('./data_files/champion.json');
+const { profile } = require('node:console');
 require('dotenv').config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds]});
@@ -64,17 +65,24 @@ client.on('interactionCreate', async interaction =>{
           context.fillStyle = '#ffffff';
           context.fillText(data.stats[0].summonerName, canvas.width / 2.8, canvas.height / 1.8);
 
-          const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile-image.png'})
+          const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile-image.png'}) // User most played champion
+          const rankedEmblem = new AttachmentBuilder(`./images/lolRankedEmblems/Emblem_${data.stats[0].tier.toLowerCase()[0].toUpperCase() + data.stats[0].tier.substring(1).toLowerCase()}.png`, { name: 'ranked-emblem.png'}) // User profile picture -> Change this to the Rank Emblem
 
           const playerEmbed = new EmbedBuilder()
-            .setColor(0x0099FF)
+            .setColor([40, 247, 47])
             .setTitle(data.stats[0].summonerName)
             .setAuthor({name: 'Laith Bot'})
-            .setDescription(`The stats for: ${data.stats[0].summonerName} on the server: ${interaction.fields.getTextInputValue('summonerServer')}`)
-            .setThumbnail('attachment://profileIconAttachment') // Put fields inbetween these
-            .setImage('attachment://attachment')
+            .setDescription(`Player: ${data.stats[0].summonerName}\nServer: ${interaction.fields.getTextInputValue('summonerServer')}`)
+            .setThumbnail('attachment://ranked-emblem.png')
+            .addFields(
+              { name: 'Rank', value: `${data.stats[0].tier.toLowerCase()[0].toUpperCase() + data.stats[0].tier.substring(1).toLowerCase()} ${data.stats[0].rank} ${data.stats[0].leaguePoints} LP` },
+              { name: 'Win', value: `${data.stats[0].wins}`, inline: true },
+              { name: 'Loss', value: `${data.stats[0].losses}`, inline: true },
+              { name: 'Win%', value: `${((data.stats[0].wins / (data.stats[0].wins + data.stats[0].losses)) * 100).toFixed(0)}%`, inline: true },
+            )
+            .setImage('attachment://profile-image.png')
 
-          interaction.reply({embeds: [playerEmbed], files:[attachment, `../images/lolImages/profileIcon/${data.profileIconId}.png`]}) // This sends everything
+          interaction.reply({embeds: [playerEmbed], files: [attachment, rankedEmblem]}) // This sends everything
         })
     }
   };
