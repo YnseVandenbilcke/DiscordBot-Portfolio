@@ -6,29 +6,22 @@ module.exports = {
     .setDescription('Lookup a player in the League of Legends database'),
   async execute(interaction){
     const modal = new ModalBuilder()
-      .setCustomId('myModal')
-      .setTitle('My Modal');
+      .setCustomId('leagueLookup')
+      .setTitle('Player lookup');
 
-      // Create the text input components
-      const favoriteColorInput = new TextInputBuilder()
-      .setCustomId('favoriteColorInput')
-        // The label is the prompt the user sees for this input
-      .setLabel("What's your favorite color?")
-        // Short means only a single line of text
+      const summonerName = new TextInputBuilder()
+      .setCustomId('summonerName')
+      .setLabel("Summoner name?")
       .setStyle(TextInputStyle.Short);
 
-    const hobbiesInput = new TextInputBuilder()
-      .setCustomId('hobbiesInput')
-      .setLabel("What's some of your favorite hobbies?")
-        // Paragraph means multiple lines of text.
-      .setStyle(TextInputStyle.Paragraph);
+    const summonerServer = new TextInputBuilder()
+      .setCustomId('summonerServer')
+      .setLabel("Server? -> EUW/EUNE/NA/KR")
+      .setStyle(TextInputStyle.Short);
 
-    // An action row only holds one text input,
-    // so you need one action row per text input.
-    const firstActionRow = new ActionRowBuilder().addComponents(favoriteColorInput);
-    const secondActionRow = new ActionRowBuilder().addComponents(hobbiesInput);
+    const firstActionRow = new ActionRowBuilder().addComponents(summonerName);
+    const secondActionRow = new ActionRowBuilder().addComponents(summonerServer);
 
-    // Add inputs to the modal
     modal.addComponents(firstActionRow, secondActionRow);
 
     await interaction.showModal(modal);
