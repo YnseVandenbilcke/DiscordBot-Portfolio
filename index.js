@@ -45,6 +45,10 @@ client.on('interactionCreate', async interaction =>{
       getPlayerData(interaction.fields.getTextInputValue('summonerName'), interaction.fields.getTextInputValue('summonerServer'))
         .then(async function(data){
           console.log(data);
+          if(data.stats.length === 0){
+            interaction.reply(`${interaction.fields.getTextInputValue('summonerName')} has no rank.`);
+            return
+          };
           const canvas = Canvas.createCanvas(700, 250);
           const context = canvas.getContext('2d');
 
@@ -68,11 +72,18 @@ client.on('interactionCreate', async interaction =>{
           const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile-image.png'}) // User most played champion
           const rankedEmblem = new AttachmentBuilder(`./images/lolRankedEmblems/Emblem_${data.stats[0].tier.toLowerCase()[0].toUpperCase() + data.stats[0].tier.substring(1).toLowerCase()}.png`, { name: 'ranked-emblem.png'}) // User profile picture -> Change this to the Rank Emblem
 
+          let queueType;
+          if(data.stats[0].queueType === 'RANKED_SOLO_5x5'){
+            queueType = 'Solo queue';
+          } else {
+            queueType = 'Flex queue';
+          }
+
           const playerEmbed = new EmbedBuilder()
             .setColor([40, 247, 47])
             .setTitle(data.stats[0].summonerName)
             .setAuthor({name: 'Laith Bot'})
-            .setDescription(`Player: ${data.stats[0].summonerName}\nServer: ${interaction.fields.getTextInputValue('summonerServer')}`)
+            .setDescription(`Server: ${interaction.fields.getTextInputValue('summonerServer')}\nQueue: ${queueType}`)
             .setThumbnail('attachment://ranked-emblem.png')
             .addFields(
               { name: 'Rank', value: `${data.stats[0].tier.toLowerCase()[0].toUpperCase() + data.stats[0].tier.substring(1).toLowerCase()} ${data.stats[0].rank} ${data.stats[0].leaguePoints} LP` },
