@@ -1,9 +1,10 @@
-const { Client, GatewayIntentBits, Collection, InteractionType, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, AttachmentBuilder, EmbedBuilder, Embed  } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, InteractionType, AttachmentBuilder, EmbedBuilder, ComponentType  } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const axios = require('axios');
 const Canvas = require('@napi-rs/canvas');
 const championJsonFile = require('./data_files/champion.json');
+const weaponsJson = require('./data_files/weapons.json')
 const { profile } = require('node:console');
 require('dotenv').config();
 
@@ -44,7 +45,6 @@ client.on('interactionCreate', async interaction =>{
     if(interaction.customId === 'leagueLookup'){
       getPlayerData(interaction.fields.getTextInputValue('summonerName'), interaction.fields.getTextInputValue('summonerServer'))
         .then(async function(data){
-          console.log(data);
           if(data.stats.length === 0){
             interaction.reply(`${interaction.fields.getTextInputValue('summonerName')} has no rank.`);
             return
@@ -97,6 +97,31 @@ client.on('interactionCreate', async interaction =>{
         })
     }
   };
+
+  if(interaction.isSelectMenu()){
+    if(interaction.customId === 'quartermaster'){
+      let weapons = weaponsJson;
+      if(interaction.values[0] === 'hasQuartermaster'){ // Has the perk quartermaster
+        console.log(weapons.small[0].name);
+        const canvas = Canvas.createCanvas(800, 500);
+        const context = canvas.getContext('2d');
+
+        const background = await Canvas.loadImage(`./images/canvas.jpg`);
+        context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+        context.font = applyText(canvas, weapons.small[0].name);
+        context.fillStyle = '#ffffff';
+        context.fillText(weapons.small[6].name, canvas.width / 4.5, canvas.height / 1.8);
+
+        const attachment = new AttachmentBuilder(await canvas.encode('png'), {name: 'hunt-image.png'})
+
+        interaction.reply({files: [attachment]})
+      } else { // Does not have the perk quartermaster
+
+      }
+      // interaction.reply(interaction.values[0])
+    }
+  }
 
   const command = client.commands.get(interaction.commandName);
 

@@ -1,0 +1,68 @@
+{
+  "small": [
+    {
+      "name": "Bornheim No. 3",
+      "cost": 201
+    },
+    {
+      "name":"Bornheim No. 3 Extended",
+      "cost": 306
+    },
+    {
+      "name": "Caldwell Conversion Chain Pistol",
+      "cost": 50
+    },
+    {
+      "name": "Caldwell Conversion Pistol",
+      "cost": 26
+    },
+    {
+      "name": "Caldwell Conversion Uppercut",
+      "cost": 275
+    },
+    {
+      "name": "Caldwell Pax",
+      "cost": 100
+    },
+    {
+      "name": "Caldwell Pax Claw",
+      "cost": 125
+    },
+    {
+      "name": "Cavalry Saber",
+      "cost": 60
+    },
+    {
+      "name": "Dolch 96",
+      "cost": 750
+    },
+    {
+      "name": "Hand Crossbow",
+      "cost": 35
+    },
+    {
+      "name": "LeMat Mark II Revolver",
+      "cost": 95
+    },
+    {
+      "name": "Machete",
+      "cost": 18
+    },
+    {
+      "name": "Nagant M1895",
+      "cost": 24
+    },
+    {
+      "name": "Nagant M1895 Officer",
+      "cost": 66
+    },
+    {
+      "name": "Nagant M1895 Officer Brawler",
+      "cost": 80
+    },
+    {
+      "name": "Nagant M1895 Silencer",
+      "cost": 53
+    }
+  ]
+}
